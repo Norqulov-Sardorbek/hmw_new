@@ -30,12 +30,14 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">All Products</a></li>
+                        <li><a class="dropdown-item" href="{%url 'home'%}">All Products</a></li>
                         <li>
                             <hr class="dropdown-divider"/>
                         </li>
-                        <li><a class="dropdown-item" href="#">Popular Items</a></li>
-                        <li><a class="dropdown-item" href="#">New Arrivals</a></li>
+                        {%for category in categories%}
+                        <li><a class="dropdown-item" href="{% url 'home_category' category.id %}">{{category.name}}</a></li>
+                        {%endfor%}
+
                     </ul>
                 </li>
             </ul>
@@ -67,15 +69,15 @@
     </div>
     <div class="row">
         <div class="col-1">
-            <a class="btn btn-outline-dark mt-auto" href="#"> Expensive </a>
+            <a class="btn btn-outline-dark mt-auto" href="{% url 'filter' '-price' %}"> Expensive </a>
         </div>
 
         <div class="col-1">
-            <a class="btn btn-outline-dark mt-auto" href="#"> Cheap </a>
+            <a class="btn btn-outline-dark mt-auto" href="{% url 'filter' 'price' %}"> Cheap </a>
         </div>
 
         <div class="col-1">
-            <a class="btn btn-outline-dark mt-auto" href="#"> Likes </a>
+            <a class="btn btn-outline-dark mt-auto" href="{% url 'filter' '-rating' %}"> Rating </a>
         </div>
 
     </div>

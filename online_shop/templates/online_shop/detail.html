@@ -116,7 +116,7 @@
                     <h3>Add Comment</h3>
                 </div>
 
-                <form method="POST">
+                <form method="POST" action="{% url 'comment' product.id %}">
                     {% csrf_token %}
                     <div class="form-group mb-3">
                         <label for="name">Your name</label>

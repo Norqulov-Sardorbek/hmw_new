@@ -3,23 +3,37 @@ from decimal import Decimal
 from django.db import models
 
 # Create your models here.
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-class Product(models.Model):
+
+    class Meta:
+        abstract = True
+
+class Category(BaseModel):
+    name = models.CharField(max_length=100)
+    def __str__(self):
+        return self.name
+
+class Product(BaseModel):
     class RatingChoices(models.IntegerChoices):
         one = 1
         two = 2
         three = 3
         four = 4
         five = 5
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name=models.CharField(max_length=100)
     description=models.TextField()
     price=models.DecimalField(decimal_places=2,max_digits=10)
     quantity=models.IntegerField()
     image=models.ImageField(upload_to='images/')
-    discount=models.PositiveIntegerField(max_length=2)
+    discount=models.PositiveIntegerField(max_length=3)
     rating=models.IntegerField(choices=RatingChoices.choices,default=RatingChoices.one.value)
 
-
+    def __str__(self):
+        return self.name
     @property
     def discounted_price(self):
         if self.discount >0:
@@ -31,3 +45,5 @@ class Comment(models.Model):
     comment=models.TextField()
     commented_date=models.DateTimeField(auto_now_add=True)
     owner=models.ForeignKey(Product,on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
