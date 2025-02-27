@@ -1,4 +1,4 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,13 +30,14 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{%url 'home'%}">All Products</a></li>
+                        <li><a class="dropdown-item" href="{% url 'home' %}">All Products</a></li>
                         <li>
                             <hr class="dropdown-divider"/>
                         </li>
-                        {%for category in categories%}
-                        <li><a class="dropdown-item" href="{% url 'home_category' category.id %}">{{category.name}}</a></li>
-                        {%endfor%}
+                        {% for category in categories %}
+                            <li><a class="dropdown-item"
+                                   href="{% url 'home_category' category.id %}">{{ category.name }}</a></li>
+                        {% endfor %}
 
                     </ul>
                 </li>
@@ -69,63 +70,74 @@
     </div>
     <div class="row">
         <div class="col-1">
-            <a class="btn btn-outline-dark mt-auto" href="{% url 'filter' '-price' %}"> Expensive </a>
+            <a class="btn btn-outline-dark mt-auto" href="{% url 'filter' '-price' %}">Expensive</a>
         </div>
-
         <div class="col-1">
-            <a class="btn btn-outline-dark mt-auto" href="{% url 'filter' 'price' %}"> Cheap </a>
+            <a class="btn btn-outline-dark mt-auto" href="{% url 'filter' 'price' %}">Cheap</a>
         </div>
 
         <div class="col-1">
             <a class="btn btn-outline-dark mt-auto" href="{% url 'filter' '-rating' %}"> Rating </a>
         </div>
-
+        {% if user.is_superuser %}
+        <div class="col-1"><a href="{% url 'admin-page' %}">
+            <button class="btn btn-success mt-auto" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Add product
+            </button>
+        </a>
+        </div>
+{% endif %}
     </div>
 </div>
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-2">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             {% for product in products %}
-            <div class="col mb-1">
-                <div class="card h-75">
-                    <!-- Sale badge-->
-                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">{% if product.discount %}
-                        {{product.discount}}% off {% endif %}
-                    </div>
-                    <!-- Product image-->
-                    <img class="card-img-top h-50" src="{{product.image.url}}"
-                         alt="{{product.name}}"/>
-                    <!-- Product details-->
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <!-- Product name-->
-                            <h5 class="fw-bolder">{{product.name}}</h5>
-                            <!-- Product reviews-->
+                <div class="opshi col mb-1">
+                    <div class="card h-75 position-relative">
+                    {% if user.is_superuser %}
+                        <div class="position-absolute top-0 start-0 m-2">
+                            <a class="btn btn-warning btn-sm" href="{% url 'edit_product' product.id %}">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </div>
+
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <a class="btn btn-danger btn-sm" href="{% url 'delete_product' product.id %}">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+{% endif %}
+                        {% if product.discount %}
+                            <div class="badge bg-dark text-white position-absolute top-0 start-50 translate-middle-x mt-2">
+                                {{ product.discount }}% off
+                            </div>
+                        {% endif %}
+
+                        <img class="card-img-top h-50" src="{{ product.image.url }}" alt="{{ product.name }}"/>
+
+                        <div class="card-body p-4 text-center">
+                            <h5 class="fw-bolder">{{ product.name }}</h5>
                             <div class="d-flex justify-content-center small text-warning mb-2">
                                 {% for _ in product.rating_range %}
-                                <div class="bi-star-fill"></div>
+                                    <div class="bi-star-fill"></div>
                                 {% endfor %}
-
-
                             </div>
-                            <!-- Product price-->
-                            <span class="text-muted text-decoration-line-through">{% if product.discount %}
-    <span class="text-muted text-decoration-line-through">${{ product.price }}</span>
-{% endif %}
-</span>
-                            ${{product.discounted_price}}
+                            {% if product.discount %}
+                                <span class="text-muted text-decoration-line-through">${{ product.price }}</span>
+                            {% endif %}
+                            ${{ product.discounted_price }}
+                        </div>
+
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent text-center">
+                            <a class="btn btn-outline-dark mt-auto" href="{% url 'product_details' product.id %}">
+                                View Product
+                            </a>
                         </div>
                     </div>
-                    <!-- Product actions-->
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'product_details' product.id %}">View
-                            product</a></div>
-
-
-                    </div>
                 </div>
-            </div>
-            {%endfor%}
+
+            {% endfor %}
         </div>
     </div>
 </section>
