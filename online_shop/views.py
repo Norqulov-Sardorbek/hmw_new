@@ -1,8 +1,7 @@
 from django.db.models import Q
-from .forms import ProductModelForm
 from online_shop.models import Category
-
-
+from online_shop.forms import  OrderModelForm
+from django.contrib import messages
 # Create your views here.
 
 def home(request, category: int | None = None):
@@ -118,3 +117,31 @@ def delete_product(request, product_id):
 
     return render(request, 'online_shop/confirm-delete.html', {'product': obj})
 
+def order_view(request, pk):
+    product = Product.objects.get(id=pk)
+    form = OrderModelForm()
+    if request.method == 'POST':
+        form = OrderModelForm(request.POST)
+        quantity = int(request.POST.get('quantity'))
+        if form.is_valid():
+            if product.quantity >= quantity:
+                order = form.save(commit=False)
+                order.product = product
+                product.quantity = product.quantity - quantity
+                product.save()
+                order.save()
+                # message success
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    'Order successfully created'
+                )
+                return redirect('product_details', product.id)
+            else:
+                # error message
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    'Something is wrong'
+                )
+    return render(request, 'online_shop/detail.html', {'form': form, 'product': product})
