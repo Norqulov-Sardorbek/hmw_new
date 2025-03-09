@@ -4,11 +4,30 @@ from django.contrib import admin
 from django.utils.timezone import now
 from online_shop.models import Product, Comment, Category
 
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'quantity', 'formatted_created_at')
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
+
+from adminsortable2.admin import SortableAdminMixin
+
+
+# Register your models here.
+
+
+class ProductResource(resources.ModelResource):
+    class Meta:
+        model = Product
+
+class ProductAdmin(SortableAdminMixin,
+                   ImportExportModelAdmin, admin.ModelAdmin):
+    resource_classes = [ProductResource]
+    list_display = ['name', 'price', 'quantity', 'formatted_created_at', 'order']
     search_fields = ('name',)
     list_filter = ('category', 'created_at')
-    ordering = ('-created_at',)
+    ordering = ('order',)  # Ensure sorting works!
+
+    class Media:
+        js = ('https://cdnjs.cloudflare.com/ajax/libs/Sortable/2.0.0/Sortable.min.js', 'js/admin-sortable.js')
+
 
     def formatted_created_at(self, obj):
         if obj.created_at.year == now().year:

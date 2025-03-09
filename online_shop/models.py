@@ -7,6 +7,7 @@ from django.db import models
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    order=models.PositiveIntegerField(default=0,null=True,blank=True)
 
 
     class Meta:
@@ -40,6 +41,8 @@ class Product(BaseModel):
         if self.discount >0:
             self.price=self.price*Decimal(1- self.discount/100)
         return Decimal(self.price).quantize(Decimal('.01'))
+    class Meta:
+        ordering = ['order']
 
 class Comment(models.Model):
     name=models.CharField(max_length=100)

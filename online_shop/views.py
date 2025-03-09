@@ -14,6 +14,8 @@ def home(request, category: int | None = None) -> None:
         product.rating_range = range(product.rating)
     return render(request, 'online_shop/home.html', {'products': products, "categories": categories})
 
+
+
 def details(request, product_id: int) -> None:
     product = get_object_or_404(Product, id=product_id)
     comments = Comment.objects.filter(owner=product).order_by('-commented_date')
