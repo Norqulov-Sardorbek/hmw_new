@@ -1,36 +1,73 @@
-from django.contrib.auth import authenticate, get_user_model, login, logout
-from django.shortcuts import render,redirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from users.forms import LoginForm
+
 
 # Create your views here.
-CustomUser = get_user_model()
 
 
 def login_page(request):
+    form = LoginForm()
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(request, email=cd['email'], password=cd['password'])
+            if user:
+                if user.is_active:
+                    login(request, user)
+                    return redirect('shop:index')
+                else:
+                    messages.add_message(
+                        request,
+                        messages.ERROR,
+                        'Disabled account'
+                    )
+                    return render(request, 'users/login.html')
+            else:
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    'Username or Password invalid'
+                )
+                return render(request, 'users/login.html')
 
-        user = authenticate(request, username=email, password=password)
-        if user:
-            CustomUser.objects.filter(email=email).update(is_active=True)
-            login(request, user)
-            return redirect('home')
-
-    return render(request, 'users/login.html')
+    return render(request, 'users/login.html', {'form': form})
 
 
 def register_page(request):
+    form =LoginForm()
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = CustomUser.objects.get(email=cd['email'])
+            if user:
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    'Account with this creadiantials already exists'
+                )
+                return render(request, 'users/register.html')
+            else:
+                user = CustomUser.objects.create_user(
+                    email=cd['email'],
+                    password=cd['password'],
+                )
+                user.save()
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    'You have successfully registered'
+                )
+                return render(request, 'shop:index.html')
+    return render(request, 'users/register.html', {'form': form})
 
-        if not CustomUser.objects.filter(email=email).exists():
-            user = CustomUser.objects.create_user(email=email, password=password)
-            return redirect('login')
 
-    return render(request, 'users/register.html')
 
 
 def logout_page(request):
-    logout(request)
-    return redirect('login')
+    if request.method == 'POST':
+        logout(request)
+        return redirect('shop:index')
