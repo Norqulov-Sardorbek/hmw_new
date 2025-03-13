@@ -29,8 +29,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # "jazzmin",
-    "baton",
+    "jazzmin",
+    # "baton",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,58 +43,58 @@ INSTALLED_APPS = [
     'adminsortable2',
     'import_export',
 ]
-# JAZZMIN_SETTINGS = {
-#     "site_title": "E-Commerce Admin",
-#     "site_header": "E-Commerce Admin",
-#     "site_brand": "E-Commerce",
-#     "welcome_sign": "Welcome to the E-Commerce Admin Panel",
-#     "copyright": "E-Commerce 2025",
-#     "search_model": ["online_shop.Product", "online_shop.Category"],
-#     "topmenu_links": [
-#         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
-#         {"model": "online_shop.Product"},
-#         {"model": "online_shop.Category"},
-#     ],
-#     "usermenu_links": [
-#         {"name": "Support", "url": "https://example.com/support", "new_window": True},
-#         {"model": "auth.user"},
-#     ],
-#     "changeform_format": "horizontal_tabs",
-#     "changeform_format_overrides": {
-#         "online_shop.product": "collapsible",
-#     },
-# }
-#
-# JAZZMIN_UI_TWEAKS = {
-#     "theme": "cyborg",  # Dark theme
-#     "dark_mode_theme": "darkly",
-#     "navbar": "navbar-dark bg-primary",
-#     "sidebar": "sidebar-dark-primary",
-#     "brand_colour": "navbar-primary",
-#     "accent": "accent-primary",
-#     "button_classes": {
-#         "primary": "btn-primary",
-#         "secondary": "btn-secondary",
-#         "info": "btn-info",
-#         "warning": "btn-warning",
-#         "danger": "btn-danger",
-#         "success": "btn-success",
-#     },
-# }
-
-BATON = {
-    "SITE_HEADER": "E-Commerce Admin",
-    "SITE_TITLE": "E-Commerce Admin Portal",
-    "INDEX_TITLE": "Welcome to E-Commerce Shop",
-    "SUPPORT_HREF": "https://example.com/support",
-    "COPYRIGHT": "E-Commerce 2025",
-    "POWERED_BY": "E-Commerce Team",
-    "ENABLE_THEMES": True,
-    "CHANGELIST_FILTERS_IN_MODAL": True,
-    "SHOW_MULTISORT": True,
-    "GRAVATAR_DEFAULT_IMG": "retro",
-    "LOGIN_SPLASH": "/static/baton/img/login-background.jpg",
+JAZZMIN_SETTINGS = {
+    "site_title": "E-Commerce Admin",
+    "site_header": "E-Commerce Admin",
+    "site_brand": "E-Commerce",
+    "welcome_sign": "Welcome to the E-Commerce Admin Panel",
+    "copyright": "E-Commerce 2025",
+    "search_model": ["online_shop.Product", "online_shop.Category"],
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"model": "online_shop.Product"},
+        {"model": "online_shop.Category"},
+    ],
+    "usermenu_links": [
+        {"name": "Support", "url": "https://example.com/support", "new_window": True},
+        {"model": "auth.user"},
+    ],
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {
+        "online_shop.product": "collapsible",
+    },
 }
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "cyborg",  # Dark theme
+    "dark_mode_theme": "darkly",
+    "navbar": "navbar-dark bg-primary",
+    "sidebar": "sidebar-dark-primary",
+    "brand_colour": "navbar-primary",
+    "accent": "accent-primary",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success",
+    },
+}
+#
+# BATON = {
+#     "SITE_HEADER": "E-Commerce Admin",
+#     "SITE_TITLE": "E-Commerce Admin Portal",
+#     "INDEX_TITLE": "Welcome to E-Commerce Shop",
+#     "SUPPORT_HREF": "https://example.com/support",
+#     "COPYRIGHT": "E-Commerce 2025",
+#     "POWERED_BY": "E-Commerce Team",
+#     "ENABLE_THEMES": True,
+#     "CHANGELIST_FILTERS_IN_MODAL": True,
+#     "SHOW_MULTISORT": True,
+#     "GRAVATAR_DEFAULT_IMG": "retro",
+#     "LOGIN_SPLASH": "/static/baton/img/login-background.jpg",
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
